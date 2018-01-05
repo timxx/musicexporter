@@ -1,2 +1,25 @@
-# musicexporter
-Export music from website
+# Music Exporter
+
+导出各大主流音乐网站歌单到本地
+
+## 支持的列表
+
+- [x] 虾米音乐
+- [ ] 网易云音乐
+- [ ] QQ音乐
+- [ ] 百度音乐
+
+
+## 使用方法
+
+- 虾米音乐
+
+  运行xme.py脚本，传入你的虾米音乐ID，导出到本地文件的路径（不指定则输出在终端）
+  
+  比如 python xme.py 12345 myfav.txt
+  
+## 导出格式
+
+艺人1 - 歌名1
+
+艺人n - 歌名n
