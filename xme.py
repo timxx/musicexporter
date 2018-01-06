@@ -10,6 +10,8 @@ import argparse
 import re
 import codecs
 
+import tokgl
+
 
 def parse_data(data):
     songs = []
@@ -23,7 +25,7 @@ def parse_data(data):
                 "td[@class='song_name']/a[@class='artist_name']/@title")
             if name_nodes and artist_nodes:
                 song_name = name_nodes[0]
-                artist_name = u"\u3001".join(artist_nodes)
+                artist_name = u"、".join(artist_nodes)
                 info = artist_name + " - " + song_name
                 songs.append(info)
 
@@ -51,7 +53,7 @@ def get_lib_song(uid):
 
     songs = []
     next_page_exp = re.compile(
-        u'<a class="p_redirect_l" href="/space/lib-song/u/[0-9]*/page/[0-9]{1,}">\u4e0b\u4e00\u9875</a>')
+        u'<a class="p_redirect_l" href="/space/lib-song/u/[0-9]*/page/[0-9]{1,}">下一页</a>')
     i = 1
 
     while True:
@@ -87,6 +89,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("uid", help="虾米用户ID")
     parser.add_argument("file", nargs='?', help="导出到文件，不指定则输出到终端")
+    parser.add_argument("-k", "--kgl",
+                        action="store_true",
+                        help="输出为酷狗音乐列表格式")
 
     args = parser.parse_args()
 
@@ -96,14 +101,21 @@ def main():
         sys.exit(-1)
 
     output = sys.stdout
-    if args.file:
-        output = codecs.open(args.file, "w+", encoding="utf-8")
 
-    for song in songs:
-        output.write(song + "\n")
+    if args.kgl:
+        if args.file:
+            output = args.file
+        # FIXME: python 3 can't use sys.stdout
+        tokgl.to_kgl(songs, u"虾米红心", output)
+    else:
+        if args.file:
+            output = codecs.open(args.file, "w+", encoding="utf-8")
 
-    if args.file:
-        output.close()
+        for song in songs:
+            output.write(song + "\n")
+
+        if args.file:
+            output.close()
 
 
 if __name__ == "__main__":
