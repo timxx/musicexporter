@@ -1,12 +1,14 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-from lxml import html, etree
+from lxml import html
 
 import io
 import pycurl
 import sys
 import argparse
 import re
+import codecs
 
 
 def parse_data(data):
@@ -21,7 +23,7 @@ def parse_data(data):
                 "td[@class='song_name']/a[@class='artist_name']/@title")
             if name_nodes and artist_nodes:
                 song_name = name_nodes[0]
-                artist_name = "、".join(artist_nodes)
+                artist_name = u"\u3001".join(artist_nodes)
                 info = artist_name + " - " + song_name
                 songs.append(info)
 
@@ -49,7 +51,7 @@ def get_lib_song(uid):
 
     songs = []
     next_page_exp = re.compile(
-        '<a class="p_redirect_l" href="/space/lib-song/u/[0-9]*/page/[0-9]{1,}">下一页</a>')
+        u'<a class="p_redirect_l" href="/space/lib-song/u/[0-9]*/page/[0-9]{1,}">\u4e0b\u4e00\u9875</a>')
     i = 1
 
     while True:
@@ -95,7 +97,7 @@ def main():
 
     output = sys.stdout
     if args.file:
-        output = open(args.file, "w+", encoding="utf-8")
+        output = codecs.open(args.file, "w+", encoding="utf-8")
 
     for song in songs:
         output.write(song + "\n")
