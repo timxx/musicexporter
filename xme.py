@@ -44,10 +44,10 @@ def get_lib_song(uid):
         c.USERAGENT, "Mozilla/5.0 (X11; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0")
 
     # must visit this page to get those cookies
-    c.setopt(c.URL, "http://www.xiami.com")
+    c.setopt(c.URL, "https://www.xiami.com")
     c.perform()
 
-    url = "http://www.xiami.com/space/lib-song/u/{}".format(uid)
+    url = "https://www.xiami.com/space/lib-song/u/{}".format(uid)
     c.setopt(c.URL, url)
     c.perform()
 
